@@ -1,0 +1,19 @@
+{
+  "name": "digilogger",
+  "version": "1.0.0",
+  "description": "A tool used to save Digikey data to a spread sheet",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Highbrook/DigiLogger.git"
+  },
+  "author": "Djordje Milivojevic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Highbrook/DigiLogger/issues"
+  },
+  "homepage": "https://github.com/Highbrook/DigiLogger#readme"
+}
