@@ -2,21 +2,9 @@ const listEl = document.getElementById("ul-el");
 const inputButtonEl = document.getElementById("input-btn");
 const exportButtonEl = document.getElementById("export-btn");
 const clearButtonEl = document.getElementById("clear-btn");
-//const startSearchTerm = `<tbody class="MuiTableBody-root">`;
-//const endSearchTerm = `<div class="jss148">`;
-//const trimStepOneStart = document.querySelector("#__next > main > div > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-align-content-xs-flex-start.MuiGrid-grid-xs-12.MuiGrid-grid-md-8 > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-true > div > table > tbody");
-//const trimStepOneStart = `<div class="jss130">`;
-//const trimStepOneEnd = document.querySelector("#__next > main > div > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-align-content-xs-flex-start.MuiGrid-grid-xs-12.MuiGrid-grid-md-8 > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-true > div > table > tbody");
 
-// let scrapedData;
-// let tempSnippet;
-// let betweenStepsSnippet;
-// let finalSnippet;
-// let startIndexOfSearchTerm;
-// let endIndexOfSearchTerm;
 let scrapedArray = [];
 let addedItemNumber = 0;
-
 
 inputButtonEl.addEventListener("click", async () => {
 	arrayShortener();
@@ -30,7 +18,7 @@ clearButtonEl.addEventListener("click", function () {
 	clearList();
 });
 
-
+// removing last two categories in the table (Datasheet and Customer Reference)
 async function arrayShortener() {
 	let tableData = await fetchTableData().then((value) => {
 			let finalLenth = value.length-2;
@@ -41,20 +29,10 @@ async function arrayShortener() {
 		}
 	);
 	console.log("returning value.result", tableData);
+	objectBuilder(tableData);
 }
 
-// function popLastTwoCategories(arr) {
-// 	console.log(arr);
-// 	for (let i = arr.length; i > arr.length-2; i--) {
-// 		console.log(i);
-// 		const element = arr[i];
-// 		console.log(element);
-// 		arr.pop();
-// 	}
-// 	console.log(arr);
-// 	return arr;
-// }
-
+// fetching table data of component from active chrome tab
 async function fetchTableData() {
 	const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
 	const scraped = await chrome.scripting.executeScript(
@@ -73,7 +51,18 @@ async function fetchTableData() {
 	return scraped[0].result;
 }
 
+// removing RegEx characters and creating an Object for local storage
+function objectBuilder(arr) {
+	let component;
+	// RegEx removing
+	arr.forEach(element => {
+			let newElement = element.replaceAll(/\n\t\n|\n\t|\n/g, " ");
+			console.log(newElement);
+			console.log(typeof(newElement));
+	});
+}
 
+// adding component to local storage
 function add() {
 	scrapedArray.forEach(element => {
 		localStorage.setItem(addedItemNumber, element);
@@ -84,6 +73,7 @@ function add() {
 	render();
 }
 
+// rendering items from local storage to the extension window
 function render() {
 	listEl.innerHTML = '';
 	let items = Object.keys(localStorage);
