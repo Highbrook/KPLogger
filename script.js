@@ -19,7 +19,7 @@ let addedItemNumber = 0;
 
 
 inputButtonEl.addEventListener("click", async () => {
-	stringSlicer();
+	arrayShortener();
 });
 
 exportButtonEl.addEventListener("click", function () {
@@ -31,10 +31,29 @@ clearButtonEl.addEventListener("click", function () {
 });
 
 
-function stringSlicer() {
-	let tableData = [];
-	tableData = fetchTableData().then((value) => { console.log(value) });
+async function arrayShortener() {
+	let tableData = await fetchTableData().then((value) => {
+			let finalLenth = value.length-2;
+			while (finalLenth < value.length) {
+				value.pop();
+			}
+			return value;
+		}
+	);
+	console.log("returning value.result", tableData);
 }
+
+// function popLastTwoCategories(arr) {
+// 	console.log(arr);
+// 	for (let i = arr.length; i > arr.length-2; i--) {
+// 		console.log(i);
+// 		const element = arr[i];
+// 		console.log(element);
+// 		arr.pop();
+// 	}
+// 	console.log(arr);
+// 	return arr;
+// }
 
 async function fetchTableData() {
 	const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
@@ -161,7 +180,7 @@ window.addEventListener('DOMContentLoaded', () => {
 // 		// Result will be an array of values from the execution
 // 		// For testing this will be the same as the console output if you ran scriptToExec in the console
 // 		scrapedData = scraped[0].result;
-// 		stringSlicer(scrapedData);
+// 		arrayShortener(scrapedData);
 // 	})
 // })
 
