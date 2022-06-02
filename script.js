@@ -28,7 +28,6 @@ async function arrayShortener() {
 			return value;
 		}
 	);
-	console.log("returning value.result", tableData);
 	objectBuilder(tableData);
 }
 
@@ -53,19 +52,22 @@ async function fetchTableData() {
 
 // removing RegEx characters and creating an Object for local storage
 function objectBuilder(arr) {
-	// RegEx removing
+	let fullComponentList = [];
 	arr.forEach(element => {
-			// TODO
-			// Create Object with Key and Value
-			// Find \n\t\n and assign the string value before it to the Key and then remove the RegEx
-			// Find and remove the rest of RegEx from the string and store the string in the Value
+			let component = {
+				description: "",
+				details: "",
+			};
+			let descriptionIndex = element.search(/\n\t\n/g);
+			component.description = element.slice(0,descriptionIndex);
+			
+			let temporatyDetails = element.slice(descriptionIndex+3);
+			let detailsIndex = temporatyDetails.replaceAll(/\n\t|\n/g, " ");
+			component.details = detailsIndex;
 
-			let newElement = element.replaceAll(/\n\t\n|\n\t|\n/g, " ");
-			console.log(newElement);
-			console.log(typeof(newElement));
-
-			// TODO Convert from string type to Key Value pair
+			fullComponentList.push(component);
 	});
+	console.log(fullComponentList);
 }
 
 // adding component to local storage
@@ -112,94 +114,3 @@ window.addEventListener('DOMContentLoaded', () => {
 	render();
 });
 
-
-
-
-
-
-
-
-
-// function stringCleanup(snippedString) {
-// 	let keyWordClosedBracket = `>`;
-// 	let keyWordOpenBracket = `<`;
-// 	let keyWordDatasheet = `Datasheet`;
-// 	let keyWordRef = `Customer Reference`;
-// 	let keyWordNBSP = `&nbsp;`;
-// 	let tempArray = [];
-// 	let tempFullArray = [];
-
-// 	for (let i = 0; i < snippedString.length; i++) {
-
-// 		if (snippedString.indexOf(keyWordClosedBracket, i) + 1 < snippedString.indexOf(keyWordOpenBracket, i)) {
-// 			let startOfFoundString = snippedString.indexOf(keyWordClosedBracket, i);
-// 			let endOfFoundString = snippedString.indexOf(keyWordOpenBracket, i);
-// 			let tempHolder = snippedString.slice(startOfFoundString + 1, endOfFoundString);
-// 			if (tempHolder != keyWordDatasheet && tempHolder != keyWordRef && tempHolder != keyWordNBSP) {
-// 				tempArray.push(tempHolder);
-
-// 				if (tempArray[tempArray.length - 1] != tempFullArray[tempFullArray.length - 1]) {
-// 					tempArray.pop();
-// 					tempFullArray.push(tempHolder);
-
-
-// 					if (tempFullArray.length > 20) {
-// 						endStringCleanup(tempFullArray);
-// 					} else {
-// 						tempArray.pop();
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-// 	endStringCleanup(tempFullArray);
-// 	add();
-// }
-
-
-// function scrapeThePage() {
-// 	var htmlCode = document.documentElement.outerHTML;
-// 	return htmlCode;
-// }
-
-// document.addEventListener('DOMContentLoaded', () => {
-// 	// Reaching the export-btn
-// 	const fbshare = document.querySelector('#input-btn')
-// 	fbshare.addEventListener('click', async () => {
-// 		// Get the active tab
-// 		const tabs = await chrome.tabs.query({ active: true, currentWindow: true })
-// 		const scraped = await chrome.scripting.executeScript(
-// 			{
-// 				target: { tabId: tabs[0].id },
-// 				func: scrapeThePage,
-// 			})
-// 		// Result will be an array of values from the execution
-// 		// For testing this will be the same as the console output if you ran scriptToExec in the console
-// 		scrapedData = scraped[0].result;
-// 		arrayShortener(scrapedData);
-// 	})
-// })
-
-
-/////////////////// TESTING GROUND
-/*
-let testLet = "123"
-var testVar = "123"
-notDeclaredVar = "456"
-
-function exportList(){
-	// console.log(testLet) 						// reachable declared GLOBAL VAR
-	// console.log(testVar) 						// reachable declared GLOBAL LET
-	// console.log(notDeclaredVar) 					// reachable non declared GLOBAL VAR
-	// console.log(letWithinAFunction) 				// Cannot reach a LET within a function
-	// console.log(varWithinAFunction)		 		// Cannot reach a VAR within a function
-	// console.log(notDeclaredVarWithinAFunction) 	// Cannot reach not declared VAR within a function
-}
-
-function someOtherFunction(){
-	let letWithinAFunction = "letWithinAFunction"
-	var varWithinAFunction = "varWithinAFunction"
-	notDeclaredVarWithinAFunction = "notDeclaredVarWithinAFunction"
-}
-*/
-/////////////////// TESTING GROUND
