@@ -3,7 +3,6 @@ const inputButtonEl = document.getElementById("input-btn");
 const exportButtonEl = document.getElementById("export-btn");
 const clearButtonEl = document.getElementById("clear-btn");
 
-let scrapedArray = [];
 let addedItemNumber = 0;
 
 inputButtonEl.addEventListener("click", async () => {
@@ -55,25 +54,35 @@ function objectBuilder(arr) {
 	let fullComponentList = [];
 	arr.forEach(element => {
 			let component = {
-				description: "",
-				details: "",
+				title: "",
+				body: "",
 			};
-			let descriptionIndex = element.search(/\n\t\n/g);
-			component.description = element.slice(0,descriptionIndex);
+			let titleIndex = element.search(/\n\t\n/g);
+			component.title = element.slice(0,titleIndex);
 			
-			let temporatyDetails = element.slice(descriptionIndex+3);
-			let detailsIndex = temporatyDetails.replaceAll(/\n\t|\n/g, " ");
-			component.details = detailsIndex;
+			let temporatyDetails = element.slice(titleIndex+3);
+			let bodyIndex = temporatyDetails.replaceAll(/\n\t|\n/g, " ");
+			component.body = bodyIndex;
 
 			fullComponentList.push(component);
 	});
+	add(fullComponentList);
 	console.log(fullComponentList);
 }
 
+// TODO Use JSON.Stringify to stringify fullComponentList (value) and add it to the local storage under its own Key
+// TODO Use JSON.Parse to turn back all the key value pairs from local storage and display them on the UI
+// TODO Prevent adding the same component multiple times
+// TODO Make sure that JSON.Parse later comes in handy when exporting everything
+// TODO Add the export function
+
 // adding component to local storage
-function add() {
-	scrapedArray.forEach(element => {
-		localStorage.setItem(addedItemNumber, element);
+function add(arr) {
+	let i = 0;
+	arr.forEach(element => {
+		console.log("in add(arr) ", element.title, element.body);
+		i++;
+		localStorage.setItem(addedItemNumber, `${element.title}: ${element.body}`);
 		addedItemNumber++;
 	});
 	localStorage.setItem(addedItemNumber, "break-point");
