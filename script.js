@@ -53,12 +53,18 @@ async function fetchTableData() {
 
 // removing RegEx characters and creating an Object for local storage
 function objectBuilder(arr) {
-	let component;
 	// RegEx removing
 	arr.forEach(element => {
+			// TODO
+			// Create Object with Key and Value
+			// Find \n\t\n and assign the string value before it to the Key and then remove the RegEx
+			// Find and remove the rest of RegEx from the string and store the string in the Value
+
 			let newElement = element.replaceAll(/\n\t\n|\n\t|\n/g, " ");
 			console.log(newElement);
 			console.log(typeof(newElement));
+
+			// TODO Convert from string type to Key Value pair
 	});
 }
 
