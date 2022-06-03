@@ -15,6 +15,14 @@ clearButtonEl.addEventListener("click", function () {
 	clearList();
 });
 
+document.addEventListener('click',function(e){
+    if(e.target && (e.target.id== 'delete-btn' || e.target.id== 'delete-btn-label' )){
+		if (window.confirm("Are you sure you want to remove this component?")) {
+			window.alert("Component removed!");
+		}
+    }
+});
+
 // removing last two categories in the table (Datasheet and Customer Reference)
 async function arrayShortener() {
 	let tableData = await fetchTableData().then((value) => {
@@ -81,11 +89,6 @@ function convertToString(list) {
 	return JSON.stringify(list);
 }
 
-// TODO Use JSON.Parse to turn back all the key value pairs from local storage and display them on the UI
-
-// TODO Make sure that JSON.Parse later comes in handy when exporting everything
-// TODO Add the export function
-
 // adding component to local storage
 function add(key, item) {
 	let checkExisting = localStorage.getItem(key);
@@ -100,25 +103,45 @@ function add(key, item) {
 // rendering items from local storage to the extension window
 function render() {
 	listEl.innerHTML = '';
-	let items = Object.keys(localStorage);
-	//console.log(`lenght of items is: ` + items.length);
-	for (let key = 0; key < items.length; key++) {
-		if (localStorage.getItem(key.valueOf()) != "break-point") {
-			listEl.innerHTML += `<li>${localStorage.getItem(key)}</li>`;
-		} else if (localStorage.getItem(key.valueOf()) == "break-point") {
-			listEl.innerHTML += `<br>`;
+	let localStorageItems = Object.keys(localStorage);
+	localStorageItems.forEach(element => {
+		parsedElement = JSON.parse(localStorage.getItem(element));
+		let addToListEl = '';
+		for (let i = 0; i < parsedElement.length; i++) {
+			if ('title' in parsedElement[i]) {
+				addToListEl += `<b>${parsedElement[i].title}:</b> ${parsedElement[i].body}<br>`;
+			}else if ('link' in parsedElement[i]){
+				addToListEl += `<a href="${parsedElement[i].link}"><b>Link</b></a>`;
+			}
 		}
-	}
+		listEl.innerHTML += `
+		<li id="list">
+			<div id="listItems">
+				${addToListEl}
+			</div>
+			<div id="delete-btn">
+				<label id="delete-btn-label">X</label>
+			</div>
+		</li>
+		<br>`;
+	});
+}
+
+// TODO Add individual removal of components from the list
+function deleteIndividual() {
+
 }
 
 function endStringCleanup(arrayToSave) {
 	scrapedArray = arrayToSave;
 }
 
+// TODO Add the export function
 /////////////////////////// TO IMPLEMENT
 function exportList() {
 }
 /////////////////////////// TO IMPLEMENT
+
 
 function clearList() {
 	localStorage.clear();
