@@ -3,8 +3,6 @@ const inputButtonEl = document.getElementById("input-btn");
 const exportButtonEl = document.getElementById("export-btn");
 const clearButtonEl = document.getElementById("clear-btn");
 
-let addedItemNumber = 0;
-
 inputButtonEl.addEventListener("click", async () => {
 	arrayShortener();
 });
@@ -50,7 +48,7 @@ async function fetchTableData() {
 }
 
 // removing RegEx characters and creating an Object for local storage
-function objectBuilder(arr) {
+async function objectBuilder(arr) {
 	let fullComponentList = [];
 	arr.forEach(element => {
 			let component = {
@@ -63,30 +61,39 @@ function objectBuilder(arr) {
 			let temporatyDetails = element.slice(titleIndex+3);
 			let bodyIndex = temporatyDetails.replaceAll(/\n\t|\n/g, " ");
 			component.body = bodyIndex;
-
 			fullComponentList.push(component);
 	});
-	add(fullComponentList);
-	console.log(fullComponentList);
+
+	// fetching current tab URL
+	const currentTab = await chrome.tabs.query({ active: true, currentWindow: true })
+	const currentURL =  currentTab[0].url;
+	let html = {
+		link: currentURL,
+	}
+	fullComponentList.push(html);
+
+	let dataToStore = convertToString(fullComponentList);
+	let componentName = fullComponentList[0].body;
+	add(componentName, dataToStore);
 }
 
-// TODO Use JSON.Stringify to stringify fullComponentList (value) and add it to the local storage under its own Key
+function convertToString(list) {
+	return JSON.stringify(list);
+}
+
 // TODO Use JSON.Parse to turn back all the key value pairs from local storage and display them on the UI
-// TODO Prevent adding the same component multiple times
+
 // TODO Make sure that JSON.Parse later comes in handy when exporting everything
 // TODO Add the export function
 
 // adding component to local storage
-function add(arr) {
-	let i = 0;
-	arr.forEach(element => {
-		console.log("in add(arr) ", element.title, element.body);
-		i++;
-		localStorage.setItem(addedItemNumber, `${element.title}: ${element.body}`);
-		addedItemNumber++;
-	});
-	localStorage.setItem(addedItemNumber, "break-point");
-	addedItemNumber++;
+function add(key, item) {
+	let checkExisting = localStorage.getItem(key);
+	if (checkExisting){
+		alert("Component already added to list");
+	}else{
+		localStorage.setItem(key, item);
+	}
 	render();
 }
 
