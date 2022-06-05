@@ -16,12 +16,12 @@ clearButtonEl.addEventListener("click", function () {
 });
 
 document.addEventListener('click',function(e){
-    if(e.target && (e.target.id== 'delete-btn' || e.target.id== 'delete-btn-label' )){
-		if (window.confirm("Are you sure you want to remove this component?")) {
-			window.alert("Component removed!");
-		}
+    if(e.target && (e.target.id== 'delete-btn-label' )){
+		let targetChild = e.target.parentElement.parentElement.childNodes[1].childNodes[2].data;
+		deleteIndividual(targetChild);
     }
 });
+
 
 // removing last two categories in the table (Datasheet and Customer Reference)
 async function arrayShortener() {
@@ -81,7 +81,7 @@ async function objectBuilder(arr) {
 	fullComponentList.push(html);
 
 	let dataToStore = convertToString(fullComponentList);
-	let componentName = fullComponentList[0].body;
+	let componentName = fullComponentList[0].body.toString().replaceAll(/\s/g,'');
 	add(componentName, dataToStore);
 }
 
@@ -111,7 +111,7 @@ function render() {
 			if ('title' in parsedElement[i]) {
 				addToListEl += `<b>${parsedElement[i].title}:</b> ${parsedElement[i].body}<br>`;
 			}else if ('link' in parsedElement[i]){
-				addToListEl += `<a href="${parsedElement[i].link}"><b>Link</b></a>`;
+				addToListEl += `<a id="link" href="${parsedElement[i].link}"><b>Link</b></a>`;
 			}
 		}
 		listEl.innerHTML += `
@@ -128,8 +128,14 @@ function render() {
 }
 
 // TODO Add individual removal of components from the list
-function deleteIndividual() {
-
+// removing item from local storage and re-rendering
+function deleteIndividual(itemToDelete) {
+	if (window.confirm("Are you sure you want to remove this component?")) {
+		console.log(itemToDelete.toString().replaceAll(/\s/g,''));
+		localStorage.removeItem(itemToDelete.toString().replaceAll(/\s/g,''));
+		render();
+		window.alert("Component removed!");
+	}
 }
 
 function endStringCleanup(arrayToSave) {
