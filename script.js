@@ -127,11 +127,9 @@ function render() {
 	});
 }
 
-// TODO Add individual removal of components from the list
 // removing item from local storage and re-rendering
 function deleteIndividual(itemToDelete) {
 	if (window.confirm("Are you sure you want to remove this component?")) {
-		console.log(itemToDelete.toString().replaceAll(/\s/g,''));
 		localStorage.removeItem(itemToDelete.toString().replaceAll(/\s/g,''));
 		render();
 		window.alert("Component removed!");
