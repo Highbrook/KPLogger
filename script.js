@@ -43,6 +43,7 @@ async function fetchTableData() {
 		{
 			target: { tabId: tabs[0].id },
 			func: function () {
+				// tableFetch holds the JS Path to the table we want to fetch, change this line of code if it stops working in the future
 				let tableFetch = document.querySelector("#__next > main > div > div.MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-4 > div.MuiGrid-root.MuiGrid-container.MuiGrid-item.MuiGrid-align-content-xs-flex-start.MuiGrid-grid-xs-12.MuiGrid-grid-md-8 > div.MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-true > div > table > tbody");
 				let scrapedArrayData = [];
 				for (let i = 0; i < tableFetch.children.length; i++) {
@@ -136,15 +137,13 @@ function deleteIndividual(itemToDelete) {
 	}
 }
 
-function endStringCleanup(arrayToSave) {
-	scrapedArray = arrayToSave;
-}
-
 // TODO Add the export function
-/////////////////////////// TO IMPLEMENT
 function exportList() {
+	var dateOffset = (new Date()).getTimezoneOffset() * 60000;
+    var localTime = (new Date(Date.now() - dateOffset)).toISOString().slice(0, 19);
+    
+    console.log(localTime, "Components List");
 }
-/////////////////////////// TO IMPLEMENT
 
 
 function clearList() {
