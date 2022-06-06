@@ -8,7 +8,8 @@ inputButtonEl.addEventListener("click", async () => {
 });
 
 exportButtonEl.addEventListener("click", function () {
-	exportList();
+	//exportList();
+	fetchFromStorage();
 });
 
 clearButtonEl.addEventListener("click", function () {
@@ -141,19 +142,65 @@ function deleteIndividual(itemToDelete) {
 function exportList(text) {
 	let dateOffset = (new Date()).getTimezoneOffset() * 60000;
     let localTime = (new Date(Date.now() - dateOffset)).toISOString().slice(0, 19);
-    let fileName = `${localTime} Components List`;
+    let fileName = `${localTime} Components List.csv`;
 
 	let element = document.createElement('a');
 	// change the data type here according to IANA Text templates
 	element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(text));
 	element.setAttribute('download', fileName);
-	  
 	element.style.display = 'none';
 	document.body.appendChild(element);
 	  
 	element.click();
-	  
 	document.body.removeChild(element);
+}
+
+function fetchFromStorage() {
+	let localStorageData = []
+	let keys = Object.keys(localStorage);
+	let i = keys.length;
+	let text = '';
+
+	keys.forEach(element => {
+		let returnedItem = localStorage.getItem(element);
+		let parsedItem = JSON.parse(returnedItem);
+
+		// these three values are required for my exported list, change these however you like
+		let desc = 'Description';
+		let detDesc = 'Detailed Description';
+		let manProdNum = 'Manufacturer Product Number';
+
+		let foundDesc = findInternalItem(parsedItem, desc);
+		let foundDetDesc = findInternalItem(parsedItem, detDesc);
+		let foundManufProdNum = findInternalItem(parsedItem, manProdNum);
+
+		text += `${parsedItem[0].body};${parsedItem[parsedItem.length -1].link};${foundDesc};${foundDetDesc};${foundManufProdNum}\n`;
+	});
+
+	exportList(text)
+}
+
+function findInternalItem(arr, value) {
+	foundItem = '';
+	arr.forEach(item => {
+		if (item.title == value) {
+			foundItem = item.body;
+		}
+	});
+	return foundItem;
+}
+
+function allStorage() {
+
+    var values = [],
+        keys = Object.keys(localStorage),
+        i = keys.length;
+
+    while ( i-- ) {
+        values.push( localStorage.getItem(keys[i]) );
+    }
+
+    return values;
 }
 
 function clearList() {
