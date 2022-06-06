@@ -137,19 +137,28 @@ function deleteIndividual(itemToDelete) {
 	}
 }
 
-// TODO Add the export function
-function exportList() {
-	var dateOffset = (new Date()).getTimezoneOffset() * 60000;
-    var localTime = (new Date(Date.now() - dateOffset)).toISOString().slice(0, 19);
-    
-    console.log(localTime, "Components List");
-}
+// getting local time for file name, creating temporary download element, downloading file
+function exportList(text) {
+	let dateOffset = (new Date()).getTimezoneOffset() * 60000;
+    let localTime = (new Date(Date.now() - dateOffset)).toISOString().slice(0, 19);
+    let fileName = `${localTime} Components List`;
 
+	let element = document.createElement('a');
+	// change the data type here according to IANA Text templates
+	element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(text));
+	element.setAttribute('download', fileName);
+	  
+	element.style.display = 'none';
+	document.body.appendChild(element);
+	  
+	element.click();
+	  
+	document.body.removeChild(element);
+}
 
 function clearList() {
 	localStorage.clear();
 	listEl.innerHTML = "";
-	addedItemNumber = 0;
 }
 
 window.addEventListener('DOMContentLoaded', () => {
