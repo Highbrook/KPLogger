@@ -5,11 +5,11 @@ and save those string values for the next time they need to create the same list
 refresh the existing listing with this data.
   
 Press "SELECT PAGE" to save the data that you are viewing.  
-Press "EXPORT" to generate and download a CVS file.  
+Press "SAVE" to generate and download a CVS file.  
     By default the data that will be exported is:  
-        - Title
+        - Title  
         - Price  
-        - Body
+        - Body  
 
 Press "DELETE ALL" to clear the list.  
 Press the red "X" on the right side of a listing to remove that individual listing from the list.  
