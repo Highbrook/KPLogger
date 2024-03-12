@@ -1,19 +1,19 @@
 {
-  "name": "digilogger",
+  "name": "KP Logger",
   "version": "1.0.0",
-  "description": "A tool used to save Digikey data to a spread sheet",
+  "description": "A tool used to save KupujemProdajem data to a spread sheet",
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Highbrook/DigiLogger.git"
+    "url": "git+https://github.com/Highbrook/KPLogger.git"
   },
   "author": "Djordje Milivojevic",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Highbrook/DigiLogger/issues"
+    "url": "https://github.com/Highbrook/KPLogger/issues"
   },
-  "homepage": "https://github.com/Highbrook/DigiLogger#readme"
+  "homepage": "https://github.com/Highbrook/KPLogger#readme"
 }
