@@ -1,5 +1,5 @@
 {
-  "name": "KP Logger",
+  "name": "kp_logger",
   "version": "1.0.0",
   "description": "A tool used to save KupujemProdajem data to a spread sheet",
   "main": "script.js",

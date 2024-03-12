@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
     "version": "1.0",
-    "name": "Digikey Tracker",
-    "description": "A tool used to save Digikey data to a spread sheet.",
+    "name": "KP Logger",
+    "description": "A tool used to save KP data to a spread sheet.",
     "action": {
         "default_popup": "index.html",
         "default_icon": "icon.png"
