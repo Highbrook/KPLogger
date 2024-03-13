@@ -26,8 +26,10 @@ document.addEventListener('click', function (e) {
 
 // fetch table data and create tableData object
 async function arrayShortener() {
+
 	let tableData = await fetchTableData()
 	objectBuilder(tableData);
+	console.log(tableData);
 }
 
 // fetching table data of listing from active chrome tab
@@ -38,6 +40,9 @@ async function fetchTableData() {
 		func: function () {
 			// tableFetch holds the JS Path to the table we want to fetch
 			let scrapedArrayData = [];
+
+			// fetch image
+			let imageUrl = document.querySelector("#__next > div > div.ThreeColumnLayout_content__eTm7W > div > div > div.Grid_col-lg-10__FPLVk.Grid_col-xs__w58_v.Grid_col-sm__DsLxt.Grid_col-md__eg0dB > section.Box_box__CCDqC.AdPage_adInfoBox__oxywY > div.AdPage_adInfoHolder__wCKs4.AdPage_hasBorder__x5yTs > section.AdViewInfo_adViewInfoHolder__3OMT7 > div.AdViewInfo_galleryHolder__5RW6n > div > div > div > div > div > div.GallerySlideItem_imageGallerySlide__geSQn.GallerySlideItem_center__sbdMK > div> img").src
 
 			// fetch title
 			let titleIndex = document.querySelector("#__next > div > div.ThreeColumnLayout_content__eTm7W > div > div > div.Grid_col-lg-10__FPLVk.Grid_col-xs__w58_v.Grid_col-sm__DsLxt.Grid_col-md__eg0dB > section.Box_box__CCDqC.AdPage_adInfoBox__oxywY > div.AdPage_adInfoHolder__wCKs4.AdPage_hasBorder__x5yTs > section.AdViewInfo_adViewInfoHolder__3OMT7 > h1")
@@ -53,9 +58,15 @@ async function fetchTableData() {
 			let temporatyBody = document.querySelector("#__next > div > div.ThreeColumnLayout_content__eTm7W > div > div > div.Grid_col-lg-10__FPLVk.Grid_col-xs__w58_v.Grid_col-sm__DsLxt.Grid_col-md__eg0dB > section.Box_box__CCDqC.AdPage_adInfoBox__oxywY > div.Grid_row__pl8x2 > div > section > div:nth-child(1) > p")
 			let innerBody = temporatyBody.textContent || temporatyBody.innerText || "";
 
+			// fetch category
+			let categoryIndex = document.querySelector("#__next > div > div.ThreeColumnLayout_content__eTm7W > div > div > div.Grid_col-lg-10__FPLVk.Grid_col-xs__w58_v.Grid_col-sm__DsLxt.Grid_col-md__eg0dB > section.Box_box__CCDqC.AdPage_adInfoBox__oxywY > div.BreadcrumbHolder_breadcrumbHolder__riFtq.BreadcrumbHolder_sidePadding__PF_e7 > div > div.Grid_col-lg-10__FPLVk.Grid_col-xs__w58_v.Grid_col-sm__DsLxt.Grid_col-md__eg0dB.BreadcrumbHolder_breadcrumb__5NZIE > span")
+			let category = categoryIndex.textContent || categoryIndex.innerText || "";
+
+			scrapedArrayData.push(imageUrl);
 			scrapedArrayData.push(innerTitle);
 			scrapedArrayData.push(innerPrice);
 			scrapedArrayData.push(innerBody);
+			scrapedArrayData.push(category);
 
 			return scrapedArrayData;
 		},
@@ -68,13 +79,17 @@ async function objectBuilder(arr) {
 	let completeListing = [];
 	let listing = {
 		title: "",
+		img: "",
 		price: "",
 		body: "",
+		category: "",
 	};
 
-	listing.title = arr[0].replaceAll(/\n\t|\n/g, " ");
-	listing.price = arr[1].replaceAll(/\n\t|\n/g, " ");
-	listing.body = arr[2].replaceAll(/\n\t|\n/g, " ");
+	listing.img = arr[0];
+	listing.title = arr[1].replaceAll(/\n\t|\n/g, " ");
+	listing.price = arr[2].replaceAll(/\n\t|\n/g, " ");
+	listing.body = arr[3].replaceAll(/\n\t|\n/g, " ");
+	listing.category = arr[4];
 
 	completeListing.push(listing);
 
@@ -157,20 +172,25 @@ function fetchFromStorage() {
 	let keys = Object.keys(localStorage);
 	let i = keys.length;
 	let text = '';
+
+	let foundImg = ''
 	let foundTitle = ''
 	let foundPrice = ''
 	let foundBody = ''
+	let foundCategory = ''
 
 	keys.forEach(element => {
 		let returnedItem = localStorage.getItem(element);
 		let parsedItem = JSON.parse(returnedItem);
 
 		parsedItem.forEach(element => {
+			foundImg = element.img;
 			foundTitle = element.title;
 			foundPrice = element.price;
 			foundBody = element.body;
+			foundCategory = element.category;
 		});
-		text += `${foundTitle};${foundPrice};${foundBody}\n`;
+		text += `${foundImg};${foundTitle};${foundPrice};${foundBody};${foundCategory};\n`;
 	});
 
 	exportList(text)
